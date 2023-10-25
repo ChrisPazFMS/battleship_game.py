@@ -48,3 +48,12 @@ shot = (shot[0].upper(), int(shot[1:]))
 
 # Contrôler le formatage du tir
 print(shot)
+
+# Vérifier si le tir a touché un navire
+for ship in ships_list:
+    if shot in ship:
+        print("Touché !")
+        ship[shot] = True
+        break
+else:
+    print("Manqué !")
