@@ -45,8 +45,13 @@ while True:
     # Entrée de l'utilisateur
     shot = input("Entrez les coordonnées de votre tir (ex. : A1) : ")
 
-    # Formatage : majuscule et nombre entier
-    shot = (shot[0].upper(), int(shot[1:]))
+    try:
+        # Convertit l'entrée en tuple (lettre, nombre)
+        shot = (shot[0].upper(), int(shot[1:]))
+    except ValueError:
+        # Si l'entrée est invalide, affiche un message et recommence la boucle
+        print("Coordonnées non valides. Veuillez réessayer.")
+        continue
 
     # Contrôler le formatage du tir
     print(shot)
