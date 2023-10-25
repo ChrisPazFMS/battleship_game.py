@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+Définition des navires pour le jeu de bataille navale.
+
+Chaque navire est un dictionnaire où :
+- Les clés sont des tuples qui représentent les coordonnées du navire sur la grille de jeu.
+- Les valeurs sont des booléens qui indiquent si la partie du navire à ces coordonnées a été touchée ou non.
+
+:return: Un dictionnaire représentant un navire.
+"""
 
 # Porte-avion en B2 à B6
 aircraft_carrier = {
