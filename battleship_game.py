@@ -38,3 +38,13 @@ ships_list = [aircraft_carrier, cruiser, destroyer, submarine, torpedo_boat]
 # Contenu des dictionnaires
 for i, ship in enumerate(ships_list, start=1):
     print(f"Navire {i}: ", ship)
+
+
+# Entrée de l'utilisateur
+shot = input("Entrez les coordonnées de votre tir (ex. : A1) : ")
+
+# Formatage : majuscule et nombre entier
+shot = (shot[0].upper(), int(shot[1:]))
+
+# Contrôler le formatage du tir
+print(shot)
