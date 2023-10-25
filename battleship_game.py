@@ -11,34 +11,37 @@ Chaque navire est un dictionnaire où :
 :return: Un dictionnaire représentant un navire.
 """
 
-# Porte-avion en B2 à B6
-aircraft_carrier = {
-    ("B", 2): False,
-    ("B", 3): False,
-    ("B", 4): False,
-    ("B", 5): False,
-    ("B", 6): False,
-}
 
-# Croiseur en A4 à A7
-cruiser = {("A", 4): False, ("A", 5): False, ("A", 6): False, ("A", 7): False}
+def create_ship(ships, name, start_coord, size, orientation):
+    """
+    Crée un navire à partir d'un nom, d'une coordonnée de départ, d'une taille et d'une orientation, et l'ajoute au dictionnaire ships.
 
-# Contre-torpilleur en C5 à C7
-destroyer = {("C", 5): False, ("C", 6): False, ("C", 7): False}
+    Args:
+        ships (dict): Dictionnaire contenant les navires.
+        name (str): Nom du navire.
+        start_coord (tuple): Coordonnée de départ du navire.
+        size (int): Nombre de cases du navire.
+        orientation (str): Orientation du navire ("H" pour horizontal, "V" pour vertical).
+    """
+    ship = {}
+    for i in range(size):
+        if orientation == "H":
+            ship[(start_coord[0], start_coord[1] + i)] = False
+        else:
+            ship[(chr(ord(start_coord[0]) + i), start_coord[1])] = False
+    ships[name] = ship
 
-# Sous-marin en H5 à H7
-submarine = {("H", 5): False, ("H", 6): False, ("H", 7): False}
 
-# Torpilleur en E9 à E10
-torpedo_boat = {("E", 9): False, ("E", 10): False}
-
-# Liste de tous les navires
-ships_list = [aircraft_carrier, cruiser, destroyer, submarine, torpedo_boat]
+ships = {}
+create_ship(ships, "Porte-avions", ("B", 2), 5, "H")
+create_ship(ships, "Croiseur", ("A", 4), 4, "V")
+create_ship(ships, "Contre-torpilleur", ("C", 5), 3, "H")
+create_ship(ships, "Sous-marin", ("H", 5), 3, "H")
+create_ship(ships, "Torpilleur", ("E", 9), 2, "H")
 
 # Contenu des dictionnaires
-for i, ship in enumerate(ships_list, start=1):
-    print(f"Navire {i}: ", ship)
-
+for i, (name, ship) in enumerate(ships.items(), start=1):
+    print(f"Navire {i}: {name} {ship}")
 
 # Boucle de jeu
 while True:
@@ -57,7 +60,7 @@ while True:
     print(shot)
 
     # Vérifier si le tir a touché un navire
-    for ship in ships_list:
+    for ship in ships.values():
         if shot in ship:
             print("Touché !")
             ship[shot] = True
@@ -70,7 +73,7 @@ while True:
     else:
         print("Manqué !")
 
-    # Vérifier si le jeu est terminé
-    if all(all(ship.values()) for ship in ships_list):
+       # Vérifier si le jeu est terminé
+    if all(all(ship.values()) for ship in ships.values()):
         print("Vous avez gagné !")
         break
