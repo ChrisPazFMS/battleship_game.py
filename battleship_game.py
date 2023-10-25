@@ -40,20 +40,32 @@ for i, ship in enumerate(ships_list, start=1):
     print(f"Navire {i}: ", ship)
 
 
-# Entrée de l'utilisateur
-shot = input("Entrez les coordonnées de votre tir (ex. : A1) : ")
+# Boucle de jeu
+while True:
+    # Entrée de l'utilisateur
+    shot = input("Entrez les coordonnées de votre tir (ex. : A1) : ")
 
-# Formatage : majuscule et nombre entier
-shot = (shot[0].upper(), int(shot[1:]))
+    # Formatage : majuscule et nombre entier
+    shot = (shot[0].upper(), int(shot[1:]))
 
-# Contrôler le formatage du tir
-print(shot)
+    # Contrôler le formatage du tir
+    print(shot)
 
-# Vérifier si le tir a touché un navire
-for ship in ships_list:
-    if shot in ship:
-        print("Touché !")
-        ship[shot] = True
+    # Vérifier si le tir a touché un navire
+    for ship in ships_list:
+        if shot in ship:
+            print("Touché !")
+            ship[shot] = True
+
+            # Vérifier si le navire est coulé
+            if all(ship.values()):
+                print("Coulé !")
+
+            break
+    else:
+        print("Manqué !")
+
+    # Vérifier si le jeu est terminé
+    if all(all(ship.values()) for ship in ships_list):
+        print("Vous avez gagné !")
         break
-else:
-    print("Manqué !")
