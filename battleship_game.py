@@ -34,3 +34,7 @@ torpedo_boat = {("E", 9): False, ("E", 10): False}
 
 # Liste de tous les navires
 ships_list = [aircraft_carrier, cruiser, destroyer, submarine, torpedo_boat]
+
+# Contenu des dictionnaires
+for i, ship in enumerate(ships_list, start=1):
+    print(f"Navire {i}: ", ship)
