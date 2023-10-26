@@ -43,37 +43,41 @@ create_ship(ships, "Torpilleur", ("E", 9), 2, "H")
 for i, (name, ship) in enumerate(ships.items(), start=1):
     print(f"Navire {i}: {name} {ship}")
 
-# Boucle de jeu
-while True:
-    # Entrée de l'utilisateur
-    shot = input("Entrez les coordonnées de votre tir (ex. : A1) : ")
 
-    try:
-        # Convertit l'entrée en tuple (lettre, nombre)
-        shot = (shot[0].upper(), int(shot[1:]))
-    except ValueError:
-        # Si l'entrée est invalide, affiche un message et recommence la boucle
-        print("Coordonnées non valides. Veuillez réessayer.")
-        continue
+def get_shot():
+    """
+    Demande à l'utilisateur d'entrer les coordonnées de son tir et valide l'entrée.
 
-    # Contrôler le formatage du tir
-    print(shot)
+    :return: Un tuple représentant les coordonnées du tir.
+    """
+    while True:
+        shot = input("Entrez les coordonnées de votre tir (ex. : A1) : ")
+        try:
+            return (shot[0].upper(), int(shot[1:]))
+        except ValueError:
+            print("Coordonnées non valides. Veuillez réessayer.")
 
-    # Vérifier si le tir a touché un navire
+
+def check_shot(ships, shot):
+    """
+    Vérifie si un tir a touché un navire.
+
+    :param ships: Un dictionnaire représentant les navires.
+    :param shot: Un tuple représentant les coordonnées du tir.
+    :return: Le navire touché, ou None si aucun navire n'a été touché.
+    """
     for ship in ships.values():
         if shot in ship:
-            print("Touché !")
             ship[shot] = True
+            return ship
+    return None
 
-            # Vérifier si le navire est coulé
-            if all(ship.values()):
-                print("Coulé !")
 
-            break
-    else:
-        print("Manqué !")
+def check_win(ships):
+    """
+    Vérifie si tous les navires ont été coulés.
 
-       # Vérifier si le jeu est terminé
-    if all(all(ship.values()) for ship in ships.values()):
-        print("Vous avez gagné !")
-        break
+    :param ships: Un dictionnaire représentant les navires.
+    :return: True si tous les navires ont été coulés, False sinon.
+    """
+    return all(all(ship.values()) for ship in ships.values())
