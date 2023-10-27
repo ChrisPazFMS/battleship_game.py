@@ -10,7 +10,16 @@ Chaque navire est un dictionnaire où :
 
 :return: Un dictionnaire représentant un navire.
 """
+# Créez une matrice 10x10 pour représenter la grille de jeu
+grid = [['.' for _ in range(10)] for _ in range(10)]
 
+
+def print_grid(grid):
+    print('     ' + '   '.join(chr(65 + i) for i in range(10)) + '  ')
+    print('   +' + '---+' * 10)
+    for i, row in enumerate(grid, start=1):
+        print(f'{i:2d} | ' + ' | '.join('\033[31mO\033[0m' if cell == 'O' else cell for cell in row) + ' |')
+        print('   +' + '---+' * 10)
 
 def ask_coord():
     """
@@ -112,7 +121,7 @@ def analyze_shot(ships, name, shot_coord):
     """
     ship = ships[name]
     if ship_is_hit(ship, shot_coord):
-        print("Touché !")
+        print("\033[1m\033[32mTouché !\033[0m")
         ship[shot_coord] = True
         if ship_is_sunk(ship):
             print("Coulé !")
@@ -120,6 +129,8 @@ def analyze_shot(ships, name, shot_coord):
         return True
     return False
 
+# Afficher la grille initiale
+print_grid(grid)
 
 # Boucle de jeu
 while True:
@@ -130,11 +141,21 @@ while True:
     print(shot)
 
     # Tir a touché un navire
+    hit = False
     for name in list(ships.keys()):
         if analyze_shot(ships, name, shot):
+            hit = True
             break
-    else:
-        print("Manqué !")
+
+    # Mettre à jour la grille
+    letter, number = shot
+    grid[number - 1][ord(letter) - 65] = 'O' if hit else 'X'
+
+    # Afficher la grille
+    print_grid(grid)
+
+    if not hit:
+        print("\033[1m\033[31mManqué !\033[0m")
 
     # Jeu terminé
     if not ships:
