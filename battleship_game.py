@@ -44,6 +44,8 @@ def create_ship(ships, name, start_coord, size, orientation):
         start_coord (tuple): Coordonnée de départ du navire.
         size (int): Nombre de cases du navire.
         orientation (str): Orientation du navire ("H" pour horizontal, "V" pour vertical).
+
+
     """
     ship = {}
     start_letter, start_number = start_coord
@@ -68,30 +70,73 @@ create_ship(ships, "Torpilleur", ("H", 5), 3, "H")
 for i, (name, ship) in enumerate(ships.items(), start=1):
     print(f"Navire {i}: {name} {ship}")
 
+
+def ship_is_hit(ship, shot_coord):
+    """
+    Vérifie si un navire est touché par un tir.
+
+    Args:
+        ship (dict): Le navire à vérifier.
+        shot_coord (tuple): Les coordonnées du tir.
+
+    Returns:
+        bool: True si le navire est touché, False sinon.
+    """
+    return shot_coord in ship
+
+
+def ship_is_sunk(ship):
+    """
+    Vérifie si un navire est coulé.
+
+    Args:
+        ship (dict): Le navire à vérifier.
+
+    Returns:
+        bool: True si le navire est coulé, False sinon.
+    """
+    return all(ship.values())
+
+
+def analyze_shot(ships, name, shot_coord):
+    """
+    Analyse un tir sur un navire.
+
+    Args:
+        ships (dict): Dictionnaire contenant les navires.
+        name (str): Nom du navire.
+        shot_coord (tuple): Les coordonnées du tir.
+
+    Returns:
+        bool: True si le navire a été touché par le tir, False sinon.
+    """
+    ship = ships[name]
+    if ship_is_hit(ship, shot_coord):
+        print("Touché !")
+        ship[shot_coord] = True
+        if ship_is_sunk(ship):
+            print("Coulé !")
+            del ships[name]
+        return True
+    return False
+
+
 # Boucle de jeu
 while True:
     # Entrée de l'utilisateur
-    shot = ask_coord()  # Utilisez la fonction ask_coord pour obtenir les coordonnées du tir
+    shot = ask_coord()  # Obtenir les coordonnées du tir
 
     # Contrôler le formatage du tir
     print(shot)
 
-    # Vérifier si le tir a touché un navire
-    for ship in ships.values():
-        if shot in ship:
-            if ship[shot] == True:
-                print("Cette partie du navire a déjà été touchée !")
-            else:
-                ship[shot] = True
-                if all(ship.values()):
-                    print("Coulé !")
-                else:
-                    print("Touché !")
+    # Tir a touché un navire
+    for name in list(ships.keys()):
+        if analyze_shot(ships, name, shot):
             break
     else:
         print("Manqué !")
 
-    # Vérifier si le jeu est terminé
-    if all(all(ship.values()) for ship in ships.values()):
+    # Jeu terminé
+    if not ships:
         print("Vous avez gagné !")
         break
